@@ -7,9 +7,16 @@ To download project:
 git clone https://github.com/KozlovKA/ibaBeginingTask
 ```
 ### Installing
-To install all libraries you need, print in terminal in `IbaTask` directory:
+To install all dependeies you need to print in terminal in `IbaTask` directory:
 ```sh
-build.sbt
+sbt compile
+```
+### Running
+If you want to run this proggram use next command in terminal:
+```sh
+sbt run
+```
+But there are two enviroental variables(bdUsername and dbPassword), so you should create it before start this program or you will get error.
 ## Built With
 
 * [Scala](https://www.scala-lang.org/) - Scala is a strong statically typed general-purpose programming language which supports both object-oriented programming and functional programming.
