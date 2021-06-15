@@ -1,8 +1,8 @@
 package by.kozlov.iba
 
-import org.apache.spark.sql.SparkSession
 import org.apache.log4j._
-
+import java.sql.Connection
+import java.time.LocalTime
 import scala.collection.mutable.ArrayBuffer
 
 object DataLoad {
@@ -43,10 +43,12 @@ object DataLoad {
     result
   }
 
-  def tableCreation(spark: SparkSession, productID: ArrayBuffer[Int], productGroup: ArrayBuffer[Int], year: ArrayBuffer[Int], jan: ArrayBuffer[Int],
+  def tableCreation(con: Connection, productID: ArrayBuffer[Int], productGroup: ArrayBuffer[Int], year: ArrayBuffer[Int], jan: ArrayBuffer[Int],
                     feb: ArrayBuffer[Int], mar: ArrayBuffer[Int], apr: ArrayBuffer[Int], may: ArrayBuffer[Int], jun: ArrayBuffer[Int],
                     jul: ArrayBuffer[Int], aug: ArrayBuffer[Int], sep: ArrayBuffer[Int],
-                    oct: ArrayBuffer[Int], nov: ArrayBuffer[Int], dec: ArrayBuffer[Int]):Unit = {
+                    oct: ArrayBuffer[Int], nov: ArrayBuffer[Int], dec: ArrayBuffer[Int]): Unit = {
+    var index: Int = 0
+    val rs = con.prepareStatement("""INSERT INTO PRT00338.product_record VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""")
     for (x <- 0 to 20000) {
       val table_productID = productID.apply(x)
       val table_productGroup = productGroup.apply(x)
@@ -63,32 +65,45 @@ object DataLoad {
       val table_oct = oct.apply(x)
       val table_nov = nov.apply(x)
       val table_dec = dec.apply(x)
-      spark.sql(s"INSERT INTO products_record VALUES($table_productID,$table_productGroup,$table_year,$table_jan,$table_feb,$table_mar,$table_apr,$table_may,$table_jun,$table_jul,$table_aug,$table_sep,$table_oct,$table_nov,$table_dec)")
+      rs.setInt(1, table_productID)
+      rs.setInt(2, table_productGroup)
+      rs.setInt(3, table_year)
+      rs.setInt(4, table_jan)
+      rs.setInt(5, table_feb)
+      rs.setInt(6, table_mar)
+      rs.setInt(7, table_apr)
+      rs.setInt(8, table_may)
+      rs.setInt(9, table_jun)
+      rs.setInt(10, table_jul)
+      rs.setInt(11, table_aug)
+      rs.setInt(12, table_sep)
+      rs.setInt(13, table_oct)
+      rs.setInt(14, table_nov)
+      rs.setInt(15, table_dec)
+      rs.addBatch()
+      rs.executeUpdate()
     }
+    rs.close()
+  }
+
+  Logger.getLogger("org").setLevel(Level.ERROR)
+
+  def connectURL(): java.sql.Connection = {
+    val url = "jdbc:db2://dashdb-txn-sbox-yp-dal09-14.services.dal.bluemix.net:50001/BLUDB:sslConnection=true;"
+    val username = sys.env("dbUsername")
+    val password = sys.env("dbPassword")
+    Class.forName("com.ibm.db2.jcc.DB2Driver")
+    val connection = java.sql.DriverManager.getConnection(url, username, password)
+    connection
   }
 
   def main(args: Array[String]): Unit = {
-    Logger.getLogger("org").setLevel(Level.ERROR)
-    val ss = SparkSession
-      .builder()
-      .appName("ibaTask")
-      .master("local[*]")
-      .getOrCreate()
-    val input = ss
-      .read
-      .format("jdbc")
-      .option("username", sys.env("dbUsername"))
-      .option("password", sys.env("dbPassword"))
-      .option("driver", "com.ibm.db2.jcc.DB2Driver")
-      .option("url", "jdbc:db2://dashdb-txn-sbox-yp-dal09-14.services.dal.bluemix.net:50000/BLUDB:user=" + sys.env("dbUsername") + ";PWD=" + sys.env("dbPassword") + ";Security=SSL;")
-      .option("dbtable", "PRT00338.products_record")
-      .load()
-    input.createOrReplaceTempView("products_record")
+    val con: java.sql.Connection = connectURL()
     val productID = productIDDefinition()
     val productGroup = productGroupDefinition()
     val year = yearDefinition()
     val jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec = purchaseAmountDefinition()
-    tableCreation(ss, productID, productGroup, year, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec)
-    input.show()
+    tableCreation(con, productID, productGroup, year, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec)
   }
 }
+
