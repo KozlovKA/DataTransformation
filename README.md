@@ -53,6 +53,8 @@ sbt assembly
 ```sh
 spark-sumbit nameOfYourApplication-assembly-applicationVersion.jar
 ```
+nameOfYourApplication-assembly-applicationVersion.jar - JAR file which was created by sby assembly, you can find it in projectName/targer/scala-version/
+
 ## Built With
 
 * [Scala](https://www.scala-lang.org/) - Scala is a strong statically typed general-purpose programming language that supports both object-oriented programming and functional programming.
