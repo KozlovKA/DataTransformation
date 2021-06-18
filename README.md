@@ -30,10 +30,7 @@ But there are two environmental variables(bdUsername and dbPassword), so you sho
 2. Save the year total as a new column year_purchases
 3. Remove the columns with monthly amounts from the data frame
 #### And to save the result to the Cloud Object Storage -> https://www.ibm.com/cloud/object-storage
-In this part, we are starting to use spark so, if you have done all actions before you can use `spark-submit` to process it in the console, but you need to use some paramets to proseed it:
-```sh
-spark-submit --conf <dbUsername>=<value> --conf <dbPassword>=<value> --conf <access.key>=<value> --conf <endpoint>=<value> --conf <secret.key>=<value> 
-```
+In this part, we are starting to use spark so, if you have done all actions before you can use `spark-submit` to process it in the console, but you need to use some paramets to proceed it.
 `dbUsername` -> your username to DB2 database
 
 `dbPassword` -> your password to DB2 database
