@@ -47,6 +47,14 @@ Also you should use there --jars parametr with yours jar which has all inforamti
 ```sh
 sbt assembly
 ```
+
+## Starting by using spark submit
+#### So we got everythink that we need for spark-submit and for running our spark we need to use :  
+```sh
+spark-sumbit nameOfYourApplication-assembly-applicationVersion.jar
+```
+nameOfYourApplication-assembly-applicationVersion.jar - JAR file which was created by sby assembly, you can find it in projectName/targer/scala-version/
+
 ## Built With
 
 * [Scala](https://www.scala-lang.org/) - Scala is a strong statically typed general-purpose programming language that supports both object-oriented programming and functional programming.
