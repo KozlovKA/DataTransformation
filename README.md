@@ -55,12 +55,17 @@ spark-sumbit nameOfYourApplication-assembly-applicationVersion.jar
 ```
 nameOfYourApplication-assembly-applicationVersion.jar - JAR file which was created by sby assembly, you can find it in projectName/targer/scala-version/
 
+##Testing of the application
+There were 3 Unit tests added which check work of the database, dataset, and of data creation. Use can start them by using
+```sh
+sbt test
+```
 ## Built With
 
 * [Scala](https://www.scala-lang.org/) - Scala is a strong statically typed general-purpose programming language that supports both object-oriented programming and functional programming.
 * [Spark](https://spark.apache.org/) - Apache Spark is an open-source unified analytics engine for large-scale data processing.
 * [MySql](https://www.mysql.com/) - SQL is a domain-specific language used in programming and designed for managing data held in a relational database management system, or for stream processing in a relational data stream management system
-
+* [ScalaTest](https://www.scalatest.org/) - framework to create unit tests for scala
 ## Authors
 
 * **Kirill Kozlov** - 
