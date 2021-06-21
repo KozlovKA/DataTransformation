@@ -1,6 +1,5 @@
 package by.kozlov.iba
 
-import org.apache.log4j.{Level, Logger}
 
 import java.sql.Connection
 import scala.collection.mutable.ArrayBuffer
