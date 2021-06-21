@@ -46,9 +46,11 @@ object DataLoad {
   def tableCreation(con: Connection, productID: ArrayBuffer[Int], productGroup: ArrayBuffer[Int], year: ArrayBuffer[Int], jan: ArrayBuffer[Int],
                     feb: ArrayBuffer[Int], mar: ArrayBuffer[Int], apr: ArrayBuffer[Int], may: ArrayBuffer[Int], jun: ArrayBuffer[Int],
                     jul: ArrayBuffer[Int], aug: ArrayBuffer[Int], sep: ArrayBuffer[Int],
-                    oct: ArrayBuffer[Int], nov: ArrayBuffer[Int], dec: ArrayBuffer[Int]): Unit = {
+                    oct: ArrayBuffer[Int], nov: ArrayBuffer[Int], dec: ArrayBuffer[Int], size: Int): String = {
     val rs = con.prepareStatement("""INSERT INTO PRT00338.product_record VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""")
-    for (x <- 0 to 20000) {
+    val rt = con.createStatement()
+    val select = rt.executeQuery("""SELECT * FROM PRT00338.product_record """)
+    for (x <- 0 to size) {
       val table_productID = productID.apply(x)
       val table_productGroup = productGroup.apply(x)
       val table_year = year.apply(x)
@@ -82,7 +84,12 @@ object DataLoad {
       rs.addBatch()
       rs.executeUpdate()
     }
+    var result: String = ""
+    while (select.next()) {
+      result = select.getString("product_id")
+    }
     rs.close()
+    result
   }
 
   Logger.getLogger("org").setLevel(Level.ERROR)
@@ -97,11 +104,12 @@ object DataLoad {
   }
 
   def main(args: Array[String]): Unit = {
+    val tableSize: Int = 20000
     val con: java.sql.Connection = connectURL()
     val productID = productIDDefinition()
     val productGroup = productGroupDefinition()
     val year = yearDefinition()
     val jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec = purchaseAmountDefinition()
-    tableCreation(con, productID, productGroup, year, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec)
+    tableCreation(con, productID, productGroup, year, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec, tableSize)
   }
 }
