@@ -9,7 +9,7 @@ object DataTransformation {
     val year_totally = input
       .select("product_id", "product_group", "year", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec")
       .withColumn("total_year", expr("jan + feb + mar + apr + may + jun + jul + aug + sep + oct + nov + dec"))
-      .drop("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec").sort("product_id")
+      .drop("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec")
     year_totally
   }
 
@@ -17,8 +17,9 @@ object DataTransformation {
   def main(args: Array[String]): Unit = {
     Logger.getLogger("org").setLevel(Level.ERROR)
     val input = Configuration.inputDB
+    input.show(3)
     val year_totally = dataTransformation(input)
-    year_totally.show()
-    year_totally.write.format("csv").save("cos://sparkbucket12.sparkobject123/product_data.csv")
+    year_totally.show(5)
+    year_totally.write.format("csv").save("cos://sparkbucket12.sparkobject123/product_data1.csv")
   }
 }
