@@ -9,7 +9,7 @@ object DataLoad {
 
   def productIDDefinition(): ArrayBuffer[Int] = {
     val result = ArrayBuffer[Int]()
-    for (x <- 0 to 20000) {
+    for (x <- 0 to 400000) {
       result += x
     }
     result
@@ -17,7 +17,7 @@ object DataLoad {
 
   def productGroupDefinition(): ArrayBuffer[Int] = {
     val result = ArrayBuffer[Int]()
-    for (_ <- 0 to 20000) {
+    for (_ <- 0 to 400000) {
       val r = scala.util.Random
       result += r.nextInt(10)
     }
@@ -26,7 +26,7 @@ object DataLoad {
 
   def yearDefinition(): ArrayBuffer[Int] = {
     val result = ArrayBuffer[Int]()
-    for (_ <- 0 to 20000) {
+    for (_ <- 0 to 400000) {
       val r = scala.util.Random
       val k = 2015 + r.nextInt((2018 - 2015) + 1)
       result += k
@@ -36,7 +36,7 @@ object DataLoad {
 
   def purchaseAmountDefinition(): ArrayBuffer[Int] = {
     val result = ArrayBuffer[Int]()
-    for (_ <- 0 to 20000) {
+    for (_ <- 0 to 400000) {
       val r = scala.util.Random
       result += r.nextInt(100000)
     }
@@ -50,7 +50,8 @@ object DataLoad {
     val rs = con.prepareStatement("""INSERT INTO PRT00338.product_record VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""")
     val rt = con.createStatement()
     val select = rt.executeQuery("""SELECT * FROM PRT00338.product_record """)
-    for (x <- 0 to size) {
+    for (x <- 102188 to size) {
+      println(x)
       val table_productID = productID.apply(x)
       val table_productGroup = productGroup.apply(x)
       val table_year = year.apply(x)
@@ -104,7 +105,7 @@ object DataLoad {
   }
 
   def main(args: Array[String]): Unit = {
-    val tableSize: Int = 20000
+    val tableSize: Int = 400000
     val con: java.sql.Connection = connectURL()
     val productID = productIDDefinition()
     val productGroup = productGroupDefinition()
