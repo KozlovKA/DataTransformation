@@ -6,7 +6,6 @@ object Configuration {
   val ss = SparkSession
     .builder()
     .appName("ibaTask")
-    .master("local[*]")
     .config("spark.hadoop.fs.stocator.scheme.list", "cos")
     .config("fs.stocator.cos.impl", "com.ibm.stocator.fs.cos.COSAPIClient")
     .config("fs.cos.impl", "com.ibm.stocator.fs.ObjectStoreFileSystem")
