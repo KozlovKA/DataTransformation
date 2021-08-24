@@ -40,7 +40,9 @@ object SalesTableLoad {
     val df = ss.read
       .format("csv")
       .option("header", "true")
+      .schema(salesTableSchema)
       .load("file.csv")
+    df.printSchema()
     val writeDB = df.write
       .format("jdbc")
       .option("username", sys.env("dbUsername"))
