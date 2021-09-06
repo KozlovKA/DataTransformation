@@ -54,7 +54,7 @@ def table_creation(date, product_id, amount, customer, seller, price, discount, 
     append_data = []
     for x in range(0, size):
         buy_date = f"{year[x]}-{month[x]}-{day[x]}"
-        total = price[x] * discount[x]
+        total = price[x]-(price[x] * discount[x])
         df = pd.DataFrame(
             data=[[buy_date, product_id[x], amount[x], customer[x], seller[x], price[x], discount[x], total,
                    time_now,
